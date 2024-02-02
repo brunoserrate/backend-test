@@ -32,6 +32,8 @@ return [
     'app_url' => env('APP_URL', 'http://localhost'),
     'app_port' => env('APP_PORT', '8000'),
 
+    'hash_id_key' => env('HASH_ID_KEY', 'my-secret-key'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
