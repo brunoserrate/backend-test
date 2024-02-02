@@ -54,8 +54,31 @@ class RedirectRepository extends BaseRepository
 
         return $query->get();
     }
+
+    public function buscarPorCodigo(string $code)
+    {
+        $hashId = new Hashids(env('HASH_ID_KEY'), 6);
+
+        $id = $hashId->decode($code);
+
+        $query = $this->model->newQuery();
+
+        return $query->findOrFail($id[0]);
+    }
+
     public function create(array $input) : Redirect {
         $model = $this->model->newInstance($input);
+
+        $url = filter_var($input['redirect_url'], FILTER_SANITIZE_URL);
+        $url = parse_url($url);
+
+        $input = [
+            'redirect_url' => $url['scheme'] . "://" . $url['host'] . (!empty($url['path']) ? $url['path'] : ''),
+            'query_params' => !empty($url['query']) ? $url['query'] : '',
+            'ativo' => 1,
+        ];
+
+        $model->fill($input);
 
         $model->save();
 
@@ -162,6 +185,48 @@ class RedirectRepository extends BaseRepository
         return [
             'success' => true
         ];
+    }
+
+    public function montarUrlFinal(Redirect $redirect, array $queryParams): string {
+
+        $url = $redirect->redirect_url;
+        $queriesParamsRequestTratadas = [];
+        $queriesParamsRedirect = [];
+
+        foreach($queryParams as $key => $value) {
+            if(!empty($value)) {
+                $queriesParamsRequestTratadas[$key] = $value;
+            }
+        }
+
+        if(!empty($redirect->query_params)) {
+            $query = explode('&', $redirect->query_params);
+
+            foreach($query as $q) {
+                $param = explode('=', $q);
+
+                if(!empty($param[1])) {
+                    if(!empty($queriesParamsRequestTratadas[$param[0]])) {
+                        continue;
+                    }
+
+                    $queriesParamsRedirect[$param[0]] = $param[1];
+                }
+            }
+        }
+
+        if(!empty($queriesParamsRedirect)) {
+            $url .= '?' . http_build_query($queriesParamsRedirect);
+
+            if(!empty($queriesParamsRequestTratadas)) {
+                $url .= '&' . http_build_query($queriesParamsRequestTratadas);
+            }
+        }
+        elseif(!empty($queriesParamsRequestTratadas)) {
+            $url .= '?' . http_build_query($queriesParamsRequestTratadas);
+        }
+
+        return $url;
     }
 
     // Private methods

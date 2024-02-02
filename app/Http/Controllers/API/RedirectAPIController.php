@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 
+use App\Repositories\RedirectLogRepository;
+
 /**
  * Class RedirectAPIController
  */
@@ -113,5 +115,29 @@ class RedirectAPIController extends AppBaseController
         $redirect->delete();
 
         return $this->sendSuccess('Redirect deleted successfully');
+    }
+
+    public function redirect(Request $request) {
+
+        $redirect = $this->redirectRepository->buscarPorCodigo($request->redirect);
+
+        if(empty($redirect)) {
+            return view('welcome');
+        }
+
+        $requestInfo = app('App\Repositories\RedirectLogRepository')->tratarRequest($request);
+
+        app('App\Repositories\RedirectLogRepository')->create([
+            'redirect_id' => $redirect->id,
+            'ip_request' => $requestInfo['clientIp'],
+            'user_agent_request' => $requestInfo['userAgent'],
+            'header_referer_request' => $requestInfo['referer'],
+            'query_param_request' => json_encode($requestInfo['queryParams']),
+            'access_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $finalUrl = $this->redirectRepository->montarUrlFinal($redirect, $requestInfo['queryParams']);
+
+        return redirect($finalUrl);
     }
 }

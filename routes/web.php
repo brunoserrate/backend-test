@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Redirect;
+use App\Http\Controllers\API\RedirectAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,12 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/r/{redirect}', function () {
-    $redirect = Redirect::where('code', request()->redirect)->first();
-
-    if($redirect) {
-        return redirect($redirect->redirect_url);
-    }
-
-    return view('welcome');
-});
+Route::get('/r/{redirect}', [RedirectAPIController::class, 'redirect']);

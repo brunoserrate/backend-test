@@ -25,4 +25,19 @@ class RedirectLogRepository extends BaseRepository
     {
         return RedirectLog::class;
     }
+
+    public function tratarRequest($request)
+    {
+        $clientIp = request()->getClientIp();
+        $userAgent = request()->header('User-Agent');
+        $referer = request()->header('referer');
+        $queryParams = request()->query();
+
+        return [
+            'clientIp' => $clientIp,
+            'userAgent' => $userAgent,
+            'referer' => $referer,
+            'queryParams' => $queryParams
+        ];
+    }
 }
