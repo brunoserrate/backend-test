@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Redirect;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Stat;
+use App\Models\Status;
 
 class RedirectFactory extends Factory
 {
@@ -23,9 +23,9 @@ class RedirectFactory extends Factory
      */
     public function definition()
     {
-        $stat = Stat::first();
+        $stat = Status::first();
         if (!$stat) {
-            $stat = Stat::factory()->create();
+            $stat = Status::factory()->create();
         }
 
         return [
@@ -33,7 +33,7 @@ class RedirectFactory extends Factory
             'code' => $this->faker->text($this->faker->numberBetween(5, 100)),
             'redirect_url' => $this->faker->text($this->faker->numberBetween(5, 50)),
             'query_params' => $this->faker->text($this->faker->numberBetween(5, 50)),
-            'stats_id' => $stat,
+            'status_id' => $stat,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s'),
         ];

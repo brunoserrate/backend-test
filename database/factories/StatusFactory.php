@@ -6,7 +6,7 @@ use App\Models\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
-class StatFactory extends Factory
+class StatusFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

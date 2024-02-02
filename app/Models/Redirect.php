@@ -32,7 +32,7 @@ class Redirect extends Model
         'redirect_url' => 'required|string|max:65535',
     ];
 
-    public function stats(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Status::class, 'status_id');
     }

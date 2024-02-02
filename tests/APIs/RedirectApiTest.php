@@ -17,15 +17,15 @@ class RedirectApiTest extends TestCase
      */
     public function test_criar_url_valida(){
         $response = $this->postJson('/api/redirect', [
-            'redirect_url' => 'https://www.google.com'
+            'redirect_url' => 'https://www.google.com.br'
         ]);
 
         $response->assertStatus(200);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
         $this->assertNotEmpty($result['data']['code'], 'Retorno deve conter um código (code)');
-        $this->assertEmpty($result['data']['id'], 'Retorno não deve conter id');
+        $this->assertArrayNotHasKey('id', $result['data'], 'Retorno não deve conter um id');
     }
 
     /**
@@ -34,14 +34,14 @@ class RedirectApiTest extends TestCase
 
     public function test_dns_invalido() {
         $response = $this->postJson('/api/redirect', [
-            'redirect_url' => 'https://www.invalidurl.com'
+            'redirect_url' => 'https://www.extremene-invalidate-dns.con.'
         ]);
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
     /**
@@ -54,9 +54,9 @@ class RedirectApiTest extends TestCase
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
     /**
@@ -69,9 +69,9 @@ class RedirectApiTest extends TestCase
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
     /**
@@ -84,9 +84,9 @@ class RedirectApiTest extends TestCase
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
     /**
@@ -99,9 +99,9 @@ class RedirectApiTest extends TestCase
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
     /**
@@ -114,9 +114,9 @@ class RedirectApiTest extends TestCase
 
         $response->assertStatus(422);
 
-        $result = json_decode($this->response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($result['errors'], 'Retorno deve conter um array de erros');
+        $this->assertNotEmpty($result['message'], 'Retorno deve conter uma mensagem de erro');
     }
 
 }

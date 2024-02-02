@@ -29,6 +29,8 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'app_url' => env('APP_URL', 'http://localhost'),
+    'app_port' => env('APP_PORT', '8000'),
 
     /*
     |--------------------------------------------------------------------------

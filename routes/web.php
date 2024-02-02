@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,11 @@ Route::get('/', function () {
 });
 
 Route::get('/r/{redirect}', function () {
-    // TODO: Implement the redirect logic
-    return redirect('https://www.google.com');
+    $redirect = Redirect::where('code', request()->redirect)->first();
+
+    if($redirect) {
+        return redirect($redirect->redirect_url);
+    }
+
+    return view('welcome');
 });

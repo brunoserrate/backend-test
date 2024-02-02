@@ -45,6 +45,12 @@ class RedirectAPIController extends AppBaseController
     {
         $input = $request->all();
 
+        $result = $this->redirectRepository->verificarUrl($input['redirect_url']);
+
+        if(!$result['success']) {
+            return $this->sendError($result['message'], $result['code']);
+        }
+
         $redirect = $this->redirectRepository->create($input);
 
         return $this->sendResponse($redirect->toArray(), 'Redirect saved successfully');
@@ -100,6 +106,9 @@ class RedirectAPIController extends AppBaseController
         if (empty($redirect)) {
             return $this->sendError('Redirect not found');
         }
+
+        $redirect->status_id = 2; // Inativo
+        $redirect->save();
 
         $redirect->delete();
 
