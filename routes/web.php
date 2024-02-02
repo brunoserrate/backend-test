@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/r/{redirect}', function () {
+    // TODO: Implement the redirect logic
+    return redirect('https://www.google.com');
+});
