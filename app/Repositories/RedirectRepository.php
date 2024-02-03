@@ -57,11 +57,15 @@ class RedirectRepository extends BaseRepository
 
     public function buscarPorCodigo(string $code)
     {
-        $hashId = new Hashids(env('HASH_ID_KEY'), 6);
+        $hashId = new Hashids(config('hashid.key'), config('hashid.length'));
 
         $id = $hashId->decode($code);
 
         $query = $this->model->newQuery();
+
+        if(empty($id) || empty($id[0])) {
+            return null;
+        }
 
         return $query->findOrFail($id[0]);
     }
@@ -131,7 +135,7 @@ class RedirectRepository extends BaseRepository
             ];
         }
 
-        if($url['host'] == (config('app.app_url') . ":" . config('app.app_port') ) || strpos($url['host'], config('app.app_port')) !== false) {
+        if($url['host'] == (config('app.url') . ":" . config('app.app_port') ) || strpos($url['host'], config('app.url')) !== false) {
 
             return [
                 'success' => false,
@@ -232,7 +236,7 @@ class RedirectRepository extends BaseRepository
     // Private methods
     private function gerarHashCode(Redirect $redirect): string {
 
-        $code = new Hashids(env('HASH_ID_KEY'), 6);
+        $code = new Hashids(config('hashid.key'), config('hashid.length'));
 
         return $code->encode($redirect->id);
     }

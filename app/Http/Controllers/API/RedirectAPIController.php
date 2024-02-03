@@ -140,4 +140,16 @@ class RedirectAPIController extends AppBaseController
 
         return redirect($finalUrl);
     }
+
+    public function stats($redirectCode) {
+        $redirect = $this->redirectRepository->buscarPorCodigo($redirectCode);
+
+        if(empty($redirect)) {
+            return $this->sendError('Redirect not found');
+        }
+
+        $logs = app('App\Repositories\RedirectLogRepository')->gerarEstaticas($redirect->id);
+
+        return $this->sendResponse($logs, 'Stats retrieved successfully');
+    }
 }

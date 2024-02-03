@@ -18,4 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('redirect/{redirect}/stats', [App\Http\Controllers\API\RedirectAPIController::class, 'stats']);
+
 Route::resource('redirect', App\Http\Controllers\API\RedirectAPIController::class);
