@@ -22,16 +22,17 @@ Esse documento visa coletar feedbacks sobre o teste de desenvolvimento. Desde o 
 ## Após o Teste
 
 1 - O que você achou do teste?
-> Resposta
+> O teste foi bem interessante e desafiador, também foi uma boa oportunidade de solucionar os problemas com um outro olhar.
 
 2 - Levou mais ou menos tempo do que você esperava?
-> Resposta
+> Levou mais tempo do que esperado.
 
 3 - Teve imprevistos? Quais?
-> Resposta
+> Houveram alguns imprevistos com a forma que realizei os testes unitários, demandando mais tempo do que o devido.
 
 4 - Existem pontos que você gostaria de ter melhorado?
-> Resposta
+> Sim, ao iniciar o projeto eu criei todos os testes unitários para o CRUD do Redirect e acabei gastando mais tempo do que gostaria.
+> Quando eu realizei os testes para API de estatiscas, fiz o processo um por um e o trabalho fluiu bem mais.
 
 5 - Quais falhas você encontrou na estrutura do projeto?
-> Resposta
+> Acredito que o escopo e a proposta do projeto estejam bons.
