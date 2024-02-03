@@ -40,4 +40,37 @@ class RedirectLogRepository extends BaseRepository
             'queryParams' => $queryParams
         ];
     }
+
+    public function gerarEstaticas($id){
+        $logs = $this->model->where('redirect_id', $id)->get();
+
+        $totalAcessos = $logs->count();
+        $totalAcessosUnicos = $logs->unique('ip_request')->count();
+
+        $topReferrers = $logs->groupBy('header_referer_request')->map(function($item, $key){
+            return [
+                'referer' => $key,
+                'total' => $item->count()
+            ];
+        })->sortByDesc('total')->values()->take(10);
+
+        $acessadosUltimosDias = $logs->filter(function($item){
+            return $item->access_at->diffInDays(now()) < 10;
+        })->groupBy(function($item){
+            return $item->access_at->format('Y-m-d');
+        })->map(function($item, $key){
+            return [
+                'date' => $key,
+                'total' => $item->count(),
+                'unique' => $item->unique('ip_request')->count()
+            ];
+        })->sortByDesc('total')->values()->take(-10);
+
+        return [
+            'total_acessos' => $totalAcessos,
+            'total_acessos_unicos' => $totalAcessosUnicos,
+            'top_referrers' => $topReferrers,
+            'acessados_ultimos_dias' => $acessadosUltimosDias
+        ];
+    }
 }
