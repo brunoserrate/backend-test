@@ -58,6 +58,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'app_port' => env('APP_PORT', '8000'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
