@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // a cada 3 meses
+        $schedule->command('otimizeMe:archievLogs')->cron('0 0 1 */3 *');
     }
 
     /**
