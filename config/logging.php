@@ -67,6 +67,14 @@ return [
             'days' => 14,
         ],
 
+        'logArchiev' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/archiev_logs.log'),
+            'level' => 'debug',
+            'days' => 180,
+            'permission' => 0777
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
