@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 
 use App\Repositories\RedirectLogRepository;
+use App\Models\Status;
 
 /**
  * Class RedirectAPIController
@@ -109,7 +110,7 @@ class RedirectAPIController extends AppBaseController
             return $this->sendError('Redirect not found');
         }
 
-        $redirect->status_id = 2; // Inativo
+        $redirect->status_id = Status::select('id')->where('name', 'Inativo')->first()->id;
         $redirect->save();
 
         $redirect->delete();
@@ -149,6 +150,18 @@ class RedirectAPIController extends AppBaseController
         }
 
         $logs = app('App\Repositories\RedirectLogRepository')->gerarEstaticas($redirect->id);
+
+        return $this->sendResponse($logs, 'Stats retrieved successfully');
+    }
+
+    public function statsFull($redirectCode) {
+        $redirect = $this->redirectRepository->buscarPorCodigo($redirectCode);
+
+        if(empty($redirect)) {
+            return $this->sendError('Redirect not found');
+        }
+
+        $logs = app('App\Repositories\RedirectLogRepository')->gerarEstatiscasCompletas($redirect->id);
 
         return $this->sendResponse($logs, 'Stats retrieved successfully');
     }
